@@ -12,5 +12,9 @@ public abstract class Viewer {
         this.canvas = canvas;
     }
 
+    protected Canvas getCanvas() {
+        return this.canvas;
+    }
+
     public abstract void render();
 }

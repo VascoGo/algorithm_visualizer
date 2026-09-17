@@ -6,6 +6,10 @@ public class Tree implements DataStructure {
     
     private TreeNode root;
 
+    public Tree() {
+        this.initialize();
+    }
+
     public void initialize() {
         int depth = 5;
         root = new TreeNode(0, depth, 3);
@@ -13,6 +17,10 @@ public class Tree implements DataStructure {
 
     public void reset() {
         this.initialize();
+    }
+
+    public TreeNode getRoot() {
+        return this.root;
     }
 
     public void run() {

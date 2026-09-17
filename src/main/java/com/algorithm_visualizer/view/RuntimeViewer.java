@@ -13,6 +13,6 @@ public class RuntimeViewer extends Viewer {
     }
 
     public void render() {
-        dsv.render();
+        dsv.render(super.getCanvas());
     }
 }
