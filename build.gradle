@@ -1,9 +1,28 @@
 plugins {
-    id 'java'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+}
+
+repositories {
+    mavenCentral()
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion = JavaLanguageVersion.of(26)
     }
+}
+
+javafx {
+    version = "27"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+dependencies {
+    implementation 'org.openjfx:javafx-controls:27'
+    implementation 'org.openjfx:javafx-fxml:27'
+}
+
+application {
+    mainClass = 'com.algorithm_visualizer.Main'
 }
