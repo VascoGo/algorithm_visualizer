@@ -1,7 +1,5 @@
 package com.algorithm_visualizer.view;
 
-import com.algorithm_visualizer.model.structures.DataStructure;
-
 import javafx.scene.canvas.Canvas;
 
 public abstract class Viewer {

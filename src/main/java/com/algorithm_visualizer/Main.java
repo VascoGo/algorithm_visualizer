@@ -7,10 +7,12 @@ import com.algorithm_visualizer.view.Viewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -30,8 +32,9 @@ public class Main extends Application {
         BorderPane layout = new BorderPane();
         layout.setCenter(canvas);
         
+        Rectangle2D bounds = Screen.getPrimary().getBounds();
 
-        Scene scene = new Scene(layout, 1000, 1000);
+        Scene scene = new Scene(layout, bounds.getWidth(), bounds.getHeight());
         primaryStage.setScene(scene);
         primaryStage.show();
     }

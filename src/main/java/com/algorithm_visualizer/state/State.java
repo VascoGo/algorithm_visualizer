@@ -9,12 +9,19 @@ import com.algorithm_visualizer.view.structures.TreeViewer;
 import javafx.scene.canvas.Canvas;
 
 public class State {
+    private static final int MENU_STATE = 0;
+    private static final int RUNTIME_STATE = 1;
     DataStructure ds = null;
     Viewer viewer;
-
+    private int state;
 
     public State(Canvas canvas) {
+        this.state = RUNTIME_STATE;
         viewer = new RuntimeViewer(canvas, new TreeViewer(new Tree()));
+    }
+
+    public int getState() {
+        return this.state;
     }
 
     public  void run() {
