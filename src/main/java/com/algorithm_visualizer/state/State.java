@@ -1,6 +1,5 @@
 package com.algorithm_visualizer.state;
 
-import com.algorithm_visualizer.model.structures.DataStructure;
 import com.algorithm_visualizer.view.MenuViewer;
 import com.algorithm_visualizer.view.RuntimeViewer;
 import com.algorithm_visualizer.view.Viewer;
@@ -16,7 +15,7 @@ public class State {
     private static final int MENU_STATE = 0;
     private static final int RUNTIME_STATE = 1;
     DataStructureIdentifier ds = DataStructureIdentifier.TREE;
-    Viewer viewer;
+    Viewer<? extends Parent> viewer;
     private int state;
     private Scene scene;
 
@@ -39,11 +38,11 @@ public class State {
     }
 
     public  void run() {
-        viewer.render();
+        this.viewer.render();
     }
 
     public Parent getActiveView() {
-        return viewer.getRoot();
+        return this.viewer.getRoot();
     }
 
     public DataStructureIdentifier getDsIdentifier() {
