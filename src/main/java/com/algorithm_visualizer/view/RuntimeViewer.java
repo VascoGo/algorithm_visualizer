@@ -2,7 +2,6 @@ package com.algorithm_visualizer.view;
 
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.state.State;
-import com.algorithm_visualizer.state.State.DataStructureIdentifier;
 import com.algorithm_visualizer.view.structures.DataStructureViewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
 
@@ -20,7 +19,17 @@ public class RuntimeViewer extends Viewer<BorderPane> {
                 break;
         }
         super(new BorderPane(), context);
-        super.getRoot().getChildren().add(dsv);
+        super.getRoot().setCenter(dsv);
+
+        super.getContext().getScene().setOnKeyPressed((event) -> {
+            switch (event.getCode()) {
+                case ESCAPE:
+                    super.getContext().swapState();
+                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     public void render() {

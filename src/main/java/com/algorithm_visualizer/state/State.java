@@ -30,6 +30,10 @@ public class State {
         this.scene = scene;
     }
 
+    public Scene getScene() {
+        return this.scene;
+    }
+
     public int getState() {
         return this.state;
     }
@@ -55,7 +59,12 @@ public class State {
             this.state = RUNTIME_STATE;
             this.viewer = new RuntimeViewer(this);
             this.scene.setRoot(getActiveView());
-            run();
+        } else {
+            this.state = MENU_STATE;
+            this.viewer = new MenuViewer(this);
+            this.scene.setRoot(getActiveView());
         }
+
+        run();
     }
 }
