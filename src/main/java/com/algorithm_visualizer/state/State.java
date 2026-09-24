@@ -2,6 +2,7 @@ package com.algorithm_visualizer.state;
 
 import com.algorithm_visualizer.model.structures.DataStructure;
 import com.algorithm_visualizer.model.structures.Tree;
+import com.algorithm_visualizer.view.MenuViewer;
 import com.algorithm_visualizer.view.RuntimeViewer;
 import com.algorithm_visualizer.view.Viewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
@@ -17,7 +18,7 @@ public class State {
 
     public State() {
         this.state = RUNTIME_STATE;
-        viewer = new RuntimeViewer(new TreeViewer(new Tree(), 1000, 1000));
+        viewer = new MenuViewer(this);
         viewer.render();
     }
 
