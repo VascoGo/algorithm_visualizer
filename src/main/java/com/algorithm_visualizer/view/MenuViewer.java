@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class MenuViewer extends Viewer<VBox>{
 
@@ -39,7 +40,13 @@ public class MenuViewer extends Viewer<VBox>{
         Button launchButton = new Button("Start");
         launchButton.setStyle("-fx-background-color: #ff5555; -fx-text-fill: #11111b; -fx-font-weight: bold; -fx-cursor: hand;");
 
-        // Assemble into the HBox
-        container.getChildren().addAll(label, selector, launchButton);
+        Button quitButton = new Button("Quit");
+        quitButton.setStyle("-fx-background-color: #990000; -fx-text-fill: #000000; -fx-font-weight: bold; -fx-cursor: hand;");
+        quitButton.setOnAction((action) -> {
+            Stage stage = (Stage) quitButton.getScene().getWindow();
+            stage.close();
+        });
+
+        container.getChildren().addAll(label, selector, launchButton, quitButton);
     }
 }

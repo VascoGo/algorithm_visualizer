@@ -18,5 +18,9 @@ public abstract class Viewer<T extends Parent> {
         return this.root;
     }
 
+    public State getContext() {
+        return context;
+    }
+
     public abstract void render();
 }
