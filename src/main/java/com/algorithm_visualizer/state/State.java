@@ -2,9 +2,11 @@ package com.algorithm_visualizer.state;
 
 import com.algorithm_visualizer.model.structures.DataStructure;
 import com.algorithm_visualizer.view.MenuViewer;
+import com.algorithm_visualizer.view.RuntimeViewer;
 import com.algorithm_visualizer.view.Viewer;
 
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 
 public class State {
     public enum DataStructureIdentifier {
@@ -13,14 +15,19 @@ public class State {
 
     private static final int MENU_STATE = 0;
     private static final int RUNTIME_STATE = 1;
-    DataStructureIdentifier ds = null;
+    DataStructureIdentifier ds = DataStructureIdentifier.TREE;
     Viewer viewer;
     private int state;
+    private Scene scene;
 
     public State() {
-        this.state = RUNTIME_STATE;
+        this.state = MENU_STATE;
         viewer = new MenuViewer(this);
-        viewer.render();
+        run();
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
     public int getState() {
@@ -39,7 +46,16 @@ public class State {
         return this.ds;
     }
 
-    public void changeDs(DataStructureIdentifier ds) {
+    public void setDataStructure(DataStructureIdentifier ds) {
+        this.ds = ds;
+    }
 
+    public void swapState() {
+        if (this.state == MENU_STATE) {
+            this.state = RUNTIME_STATE;
+            this.viewer = new RuntimeViewer(this);
+            this.scene.setRoot(getActiveView());
+            run();
+        }
     }
 }

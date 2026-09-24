@@ -28,10 +28,9 @@ public class Main extends Application {
         Rectangle2D bounds = Screen.getPrimary().getBounds();
 
         State state = new State();
-        
-        Parent root = state.getActiveView();
+        Scene scene = new Scene(state.getActiveView(), bounds.getWidth(), bounds.getHeight());
+        state.setScene(scene);
 
-        Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
         primaryStage.setScene(scene);
         primaryStage.show();
     }

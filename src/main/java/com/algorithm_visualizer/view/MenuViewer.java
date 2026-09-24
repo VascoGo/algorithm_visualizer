@@ -3,6 +3,7 @@ package com.algorithm_visualizer.view;
 import javafx.scene.control.Label;
 
 import com.algorithm_visualizer.state.State;
+import com.algorithm_visualizer.state.State.DataStructureIdentifier;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -28,17 +29,20 @@ public class MenuViewer extends Viewer<VBox>{
         label.setStyle("-fx-text-fill: #cdd6f4; -fx-font-size: 14px; -fx-font-weight: bold;");
 
         // 2. Data Structure Selector (ComboBox)
-        ComboBox<String> selector = new ComboBox<>();
-        selector.getItems().addAll("Binary Search Tree", "AVL Tree", "Graph", "Array Sort");
-        selector.setValue("Binary Search Tree");
+        ComboBox<DataStructureIdentifier> selector = new ComboBox<>();
+        selector.getItems().addAll(DataStructureIdentifier.values());
+        selector.setValue(DataStructureIdentifier.TREE);
 
         selector.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-
+            this.getContext().setDataStructure(newValue);
         });
 
         // 3. Launch / Action Button
         Button launchButton = new Button("Start");
         launchButton.setStyle("-fx-background-color: #ff5555; -fx-text-fill: #11111b; -fx-font-weight: bold; -fx-cursor: hand;");
+        launchButton.setOnAction((action) -> {
+            this.getContext().swapState();
+        });
 
         Button quitButton = new Button("Quit");
         quitButton.setStyle("-fx-background-color: #990000; -fx-text-fill: #000000; -fx-font-weight: bold; -fx-cursor: hand;");

@@ -14,7 +14,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     public RuntimeViewer(State context) {
         switch (context.getDsIdentifier()) {
             case TREE:
-                this.dsv = new TreeViewer(new Tree(), 100, 100);
+                this.dsv = new TreeViewer(new Tree(), 1000, 1000);
                 break;
             default:
                 break;
