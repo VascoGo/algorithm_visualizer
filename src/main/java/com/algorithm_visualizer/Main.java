@@ -8,6 +8,7 @@ import com.algorithm_visualizer.view.structures.TreeViewer;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
@@ -24,17 +25,13 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Algorithm Visualizer");
 
-        Canvas canvas = new Canvas(1000, 500);
-
-        State state = new State(canvas);
-        state.run();
-
-        BorderPane layout = new BorderPane();
-        layout.setCenter(canvas);
-        
         Rectangle2D bounds = Screen.getPrimary().getBounds();
 
-        Scene scene = new Scene(layout, bounds.getWidth(), bounds.getHeight());
+        State state = new State();
+        
+        Parent root = state.getActiveView();
+
+        Scene scene = new Scene(root, bounds.getWidth(), bounds.getHeight());
         primaryStage.setScene(scene);
         primaryStage.show();
     }

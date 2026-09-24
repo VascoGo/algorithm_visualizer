@@ -6,7 +6,7 @@ import com.algorithm_visualizer.view.RuntimeViewer;
 import com.algorithm_visualizer.view.Viewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Parent;
 
 public class State {
     private static final int MENU_STATE = 0;
@@ -15,9 +15,10 @@ public class State {
     Viewer viewer;
     private int state;
 
-    public State(Canvas canvas) {
+    public State() {
         this.state = RUNTIME_STATE;
-        viewer = new RuntimeViewer(canvas, new TreeViewer(new Tree()));
+        viewer = new RuntimeViewer(new TreeViewer(new Tree(), 1000, 1000));
+        viewer.render();
     }
 
     public int getState() {
@@ -26,5 +27,9 @@ public class State {
 
     public  void run() {
         viewer.render();
+    }
+
+    public Parent getActiveView() {
+        return viewer.getRoot();
     }
 }

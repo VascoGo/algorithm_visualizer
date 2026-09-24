@@ -2,17 +2,18 @@ package com.algorithm_visualizer.view;
 
 import com.algorithm_visualizer.view.structures.DataStructureViewer;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.layout.BorderPane;
 
-public class RuntimeViewer extends Viewer {
+public class RuntimeViewer extends Viewer<BorderPane> {
     private DataStructureViewer dsv;
 
-    public RuntimeViewer(Canvas canvas, DataStructureViewer dsv) {
-        super(canvas);
+    public RuntimeViewer(DataStructureViewer dsv) {
+        super(new BorderPane());
         this.dsv = dsv;
+        super.getRoot().getChildren().add(dsv);
     }
 
     public void render() {
-        dsv.render(super.getCanvas());
+        dsv.render();
     }
 }

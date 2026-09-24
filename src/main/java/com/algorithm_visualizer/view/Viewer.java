@@ -1,17 +1,18 @@
 package com.algorithm_visualizer.view;
 
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 
-public abstract class Viewer {
+public abstract class Viewer<T extends Parent> {
 
-    private Canvas canvas;
+    private T root;
 
-    public Viewer(Canvas canvas) {
-        this.canvas = canvas;
+    public Viewer(T root) {
+        this.root = root;
     }
 
-    protected Canvas getCanvas() {
-        return this.canvas;
+    public T getRoot() {
+        return this.root;
     }
 
     public abstract void render();

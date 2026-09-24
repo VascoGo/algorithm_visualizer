@@ -14,7 +14,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
-public class TreeViewer implements DataStructureViewer {
+public class TreeViewer extends DataStructureViewer {
     private Tree tree;
 
     private final Map<TreeNode, Point2D> positions = new HashMap<>();
@@ -25,7 +25,8 @@ public class TreeViewer implements DataStructureViewer {
     private static final double MIN_WIDTH = 55.0;
     private static final double TOP_MARGIN = 50.0;
 
-    public TreeViewer(Tree tree) {
+    public TreeViewer(Tree tree, double width, double height) {
+        super(width, height);
         this.tree = tree;
         if (this.tree != null && this.tree.getRoot() != null) {
             computeLayout(this.tree.getRoot());
@@ -86,10 +87,10 @@ public class TreeViewer implements DataStructureViewer {
         positions.put(node, new Point2D(parentX, y));
     }
 
-    @Override
-    public void render(Canvas canvas) {
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+    
+    public void render() {
+        GraphicsContext gc = this.getGraphicsContext2D();
+        gc.clearRect(0, 0, this.getWidth(), this.getHeight());
 
         TreeNode root = (tree != null) ? tree.getRoot() : null;
         if (root == null) return;
