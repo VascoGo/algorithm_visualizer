@@ -12,5 +12,9 @@ public abstract class DataStructureViewer extends Canvas{
         this.controller = controller;
     }
 
+    public Controller getController() {
+        return this.controller;
+    }
+
     public abstract void render();
 }

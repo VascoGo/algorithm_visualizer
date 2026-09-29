@@ -1,5 +1,6 @@
 package com.algorithm_visualizer.view;
 
+import com.algorithm_visualizer.controller.Algorithm;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.state.State;
 import com.algorithm_visualizer.view.structures.DataStructureViewer;
@@ -18,11 +19,10 @@ import javafx.scene.layout.Region;
 public class RuntimeViewer extends Viewer<BorderPane> {
     private DataStructureViewer dsv;
 
-    // Controls exposed for later binding/wiring
     private Button backButton;
     private Button stepButton;
     private Button runButton;
-    private ComboBox<String> operationSelector;
+    private ComboBox<Algorithm> operationSelector;
 
     public RuntimeViewer(State context) {
         super(new BorderPane(), context);
@@ -58,14 +58,28 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private void initControls() {
         // --- Navigation (Left Group) ---
         backButton = new Button("← Back to Menu");
+        backButton.setOnAction((action) -> {
+            super.getContext().swapState();
+        });
 
         // --- Controls (Center/Right Group) ---
         operationSelector = new ComboBox<>();
-        operationSelector.getItems().addAll("Insert", "Delete", "Search", "Traverse");
-        operationSelector.setValue("Insert");
+        operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
+        operationSelector.setValue(Algorithm.NULL);
+        operationSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldItem, newItem) -> {
+            dsv.getController().setAlgorithm(newItem);
+        });
 
         stepButton = new Button("Step");
+        stepButton.setOnAction((action) -> {
+            dsv.getController().step();
+            dsv.render();
+        });
+
         runButton = new Button("Run");
+        runButton.setOnAction((action) -> {
+            dsv.getController().run();
+        });
 
         // Spacer to separate back navigation from action controls
         Region spacer = new Region();
@@ -93,7 +107,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     public Button getBackButton() { return backButton; }
     public Button getStepButton() { return stepButton; }
     public Button getRunButton() { return runButton; }
-    public ComboBox<String> getOperationSelector() { return operationSelector; }
+    public ComboBox<Algorithm> getOperationSelector() { return operationSelector; }
 
     @Override
     public void render() {
