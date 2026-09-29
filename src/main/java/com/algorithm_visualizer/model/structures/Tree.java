@@ -12,7 +12,7 @@ public class Tree implements DataStructure {
 
     public void initialize() {
         int depth = 5;
-        root = new TreeNode(0, depth, 3);
+        root = new TreeNode(0, depth, 3, null);
     }
 
     public void reset() {

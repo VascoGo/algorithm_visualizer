@@ -16,4 +16,12 @@ public abstract class Node {
     public void setValue(int value) {
         this.value = value;
     }
+
+    public Boolean isExplored() {
+        return this.explored;
+    }
+
+    public void setExplored(Boolean value) {
+        this.explored = value;
+    }
 }

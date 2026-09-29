@@ -6,6 +6,8 @@ import com.algorithm_visualizer.state.State;
 import com.algorithm_visualizer.view.structures.DataStructureViewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -15,6 +17,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.util.Duration;
 
 public class RuntimeViewer extends Viewer<BorderPane> {
     private DataStructureViewer dsv;
@@ -23,6 +26,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private Button stepButton;
     private Button runButton;
     private ComboBox<Algorithm> operationSelector;
+    private Timeline loop;
 
     public RuntimeViewer(State context) {
         super(new BorderPane(), context);
@@ -50,8 +54,19 @@ public class RuntimeViewer extends Viewer<BorderPane> {
                 break;
         }
 
-        if (this.dsv != null) {
-            super.getRoot().setCenter(this.dsv);
+            if (this.dsv != null) {
+            // Container that tracks the BorderPane center area
+            javafx.scene.layout.Pane canvasHolder = new javafx.scene.layout.Pane(this.dsv);
+            
+            // Bind canvas dimensions to the container
+            this.dsv.widthProperty().bind(canvasHolder.widthProperty());
+            this.dsv.heightProperty().bind(canvasHolder.heightProperty());
+            
+            // Re-render when window or container resizes
+            this.dsv.widthProperty().addListener((obs, oldVal, newVal) -> dsv.render());
+            this.dsv.heightProperty().addListener((obs, oldVal, newVal) -> dsv.render());
+            
+            super.getRoot().setCenter(canvasHolder);
         }
     }
 
@@ -78,7 +93,20 @@ public class RuntimeViewer extends Viewer<BorderPane> {
 
         runButton = new Button("Run");
         runButton.setOnAction((action) -> {
-            dsv.getController().run();
+            this.dsv.getController().setRunning(true);
+            this.loop = new Timeline(
+                new KeyFrame(Duration.millis(500), event -> {
+                    this.dsv.getController().step();
+                    dsv.render();
+
+                    if (!dsv.getController().isRunning()) {
+                        loop.stop();
+                    }
+                })
+            );
+
+            loop.setCycleCount(Timeline.INDEFINITE);
+            loop.play();
         });
 
         // Spacer to separate back navigation from action controls

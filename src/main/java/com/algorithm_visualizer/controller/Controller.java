@@ -5,20 +5,10 @@ import java.util.List;
 import com.algorithm_visualizer.model.structures.DataStructure;
 
 public abstract class Controller {
-    private DataStructure ds;
     protected Algorithm algorithm;
     private Boolean running = false;
 
-    public Controller(DataStructure ds) {
-        this.ds = ds;
-    }
-
-    public DataStructure getDataStructure() {
-        return this.ds;
-    }
-
     public abstract void step();
-    public abstract void run();
 
     public abstract List<Algorithm> supportedAlgorithms();
     public void setAlgorithm(Algorithm algorithm) {
@@ -28,4 +18,7 @@ public abstract class Controller {
     public Boolean isRunning() {
         return this.running;
     }
+    public void setRunning(Boolean value) {
+        this.running = value;
+    } 
 }
