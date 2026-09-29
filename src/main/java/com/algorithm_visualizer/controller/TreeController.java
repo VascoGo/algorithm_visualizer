@@ -1,14 +1,12 @@
 package com.algorithm_visualizer.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.algorithm_visualizer.model.structures.Tree;
 
 public class TreeController extends Controller {
-
-    public enum TreeAlgorithm {
-        DFS, BFS
-    }
-
-    TreeAlgorithm algorithm = null;
 
     public TreeController(Tree tree) {
         super(tree);
@@ -24,7 +22,8 @@ public class TreeController extends Controller {
         
     }
 
-    void setAlgorithm(TreeAlgorithm algorithm) {
-        this.algorithm = algorithm;
+    @Override 
+    public List<Algorithm> supportedAlgorithms() {
+        return Arrays.asList(Algorithm.BFS, Algorithm.DFS);
     }
 }
