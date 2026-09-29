@@ -23,4 +23,8 @@ public class TreeController extends Controller {
     public void run() {
         
     }
+
+    void setAlgorithm(TreeAlgorithm algorithm) {
+        this.algorithm = algorithm;
+    }
 }

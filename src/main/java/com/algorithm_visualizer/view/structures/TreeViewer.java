@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.algorithm_visualizer.controller.TreeController;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.model.structures.components.TreeNode;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -26,7 +26,7 @@ public class TreeViewer extends DataStructureViewer {
     private static final double TOP_MARGIN = 50.0;
 
     public TreeViewer(Tree tree, double width, double height) {
-        super(width, height);
+        super(width, height, new TreeController(tree));
         this.tree = tree;
         if (this.tree != null && this.tree.getRoot() != null) {
             computeLayout(this.tree.getRoot());
