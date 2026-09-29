@@ -12,6 +12,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 public class TreeViewer extends DataStructureViewer {
@@ -20,15 +21,50 @@ public class TreeViewer extends DataStructureViewer {
     private final Map<TreeNode, Point2D> positions = new HashMap<>();
     private final Map<TreeNode, Double> subtree_widths = new HashMap<>();
 
-    private static final double Y_DIFFERENCE = 75.0;
-    private static final double NODE_RADIUS = 18.0;
-    private static final double MIN_WIDTH = 55.0;
-    private static final double TOP_MARGIN = 50.0;
-    private static final double SIDE_PADDING = 30.0;
+    // Base dimensions (dynamically scaled down for large trees)
+    private static final double BASE_NODE_RADIUS = 18.0;
+    private static final double BASE_Y_DIFF = 70.0;
+    private static final double BASE_MIN_WIDTH = 48.0;
+    private static final double PADDING = 24.0;
+
+    private double currentRadius = BASE_NODE_RADIUS;
+    private double currentYDiff = BASE_Y_DIFF;
+    private double currentMinWidth = BASE_MIN_WIDTH;
 
     public TreeViewer(Tree tree, double width, double height) {
         super(width, height, new TreeController(tree));
         this.tree = tree;
+    }
+
+    private int getMaxDepth(TreeNode node) {
+        if (node == null) return 0;
+        List<TreeNode> children = node.getChildren();
+        if (children == null || children.isEmpty()) return 1;
+
+        int max = 0;
+        for (TreeNode child : children) {
+            max = Math.max(max, getMaxDepth(child));
+        }
+        return 1 + max;
+    }
+
+    private void adaptMetricsForTree(TreeNode root) {
+        int depth = getMaxDepth(root);
+        
+        // Dynamically shrink spacing and radius if depth is large
+        if (depth > 8) {
+            currentRadius = 12.0;
+            currentYDiff = 45.0;
+            currentMinWidth = 30.0;
+        } else if (depth > 5) {
+            currentRadius = 15.0;
+            currentYDiff = 55.0;
+            currentMinWidth = 38.0;
+        } else {
+            currentRadius = BASE_NODE_RADIUS;
+            currentYDiff = BASE_Y_DIFF;
+            currentMinWidth = BASE_MIN_WIDTH;
+        }
     }
 
     public void computeLayout(TreeNode root) {
@@ -37,21 +73,9 @@ public class TreeViewer extends DataStructureViewer {
 
         if (root == null) return;
 
-        // 1. Compute tree footprint
+        adaptMetricsForTree(root);
         computeSubtreeWidths(root);
-
-        // 2. Initial pass relative to left = 0
         assignCoordinates(root, 0.0, 0);
-
-        // 3. Center horizontally based on root's position
-        Point2D rootPos = positions.get(root);
-        double targetCenterX = getWidth() / 2.0;
-        double shiftX = targetCenterX - rootPos.getX();
-
-        for (Map.Entry<TreeNode, Point2D> entry : positions.entrySet()) {
-            Point2D current = entry.getValue();
-            entry.setValue(new Point2D(current.getX() + shiftX, current.getY()));
-        }
     }
 
     private double computeSubtreeWidths(TreeNode node) {
@@ -59,8 +83,8 @@ public class TreeViewer extends DataStructureViewer {
 
         List<TreeNode> children = node.getChildren();
         if (children == null || children.isEmpty()) {
-            subtree_widths.put(node, MIN_WIDTH);
-            return MIN_WIDTH;
+            subtree_widths.put(node, currentMinWidth);
+            return currentMinWidth;
         }
 
         double totalWidth = 0.0;
@@ -68,7 +92,7 @@ public class TreeViewer extends DataStructureViewer {
             totalWidth += computeSubtreeWidths(child);
         }
 
-        totalWidth = Math.max(totalWidth, MIN_WIDTH);
+        totalWidth = Math.max(totalWidth, currentMinWidth);
         subtree_widths.put(node, totalWidth);
         return totalWidth;
     }
@@ -76,11 +100,11 @@ public class TreeViewer extends DataStructureViewer {
     private void assignCoordinates(TreeNode node, double leftX, int depth) {
         if (node == null) return;
 
-        double y = depth * Y_DIFFERENCE + TOP_MARGIN;
+        double y = depth * currentYDiff;
         List<TreeNode> children = node.getChildren();
 
         if (children == null || children.isEmpty()) {
-            double x = leftX + (MIN_WIDTH / 2.0);
+            double x = leftX + (currentMinWidth / 2.0);
             positions.put(node, new Point2D(x, y));
             return;
         }
@@ -108,37 +132,40 @@ public class TreeViewer extends DataStructureViewer {
 
         computeLayout(root);
 
-        // 4. Calculate bounds of the generated tree
+        // 1. Calculate the bounding box of the entire tree
         double minX = Double.MAX_VALUE;
-        double maxX = Double.MIN_VALUE;
-        double maxY = Double.MIN_VALUE;
+        double maxX = -Double.MAX_VALUE;
+        double minY = Double.MAX_VALUE;
+        double maxY = -Double.MAX_VALUE;
 
         for (Point2D pos : positions.values()) {
-            minX = Math.min(minX, pos.getX() - NODE_RADIUS);
-            maxX = Math.max(maxX, pos.getX() + NODE_RADIUS);
-            maxY = Math.max(maxY, pos.getY() + NODE_RADIUS);
+            minX = Math.min(minX, pos.getX() - currentRadius);
+            maxX = Math.max(maxX, pos.getX() + currentRadius);
+            minY = Math.min(minY, pos.getY() - currentRadius);
+            maxY = Math.max(maxY, pos.getY() + currentRadius);
         }
 
         double treeWidth = maxX - minX;
-        double treeHeight = maxY;
-        double availableWidth = getWidth() - (SIDE_PADDING * 2);
-        double availableHeight = getHeight() - (SIDE_PADDING * 2);
+        double treeHeight = maxY - minY;
 
-        // 5. Compute scale factor if tree exceeds canvas area
+        double availableWidth = Math.max(1.0, getWidth() - (PADDING * 2));
+        double availableHeight = Math.max(1.0, getHeight() - (PADDING * 2));
+
+        // 2. Uniform scaling factor so aspect ratio doesn't distort
         double scaleX = availableWidth / Math.max(treeWidth, 1.0);
         double scaleY = availableHeight / Math.max(treeHeight, 1.0);
         double scale = Math.min(1.0, Math.min(scaleX, scaleY));
 
-        gc.save();
+        // 3. Center the bounding box within the canvas
+        double scaledTreeWidth = treeWidth * scale;
+        double scaledTreeHeight = treeHeight * scale;
 
-        if (scale < 1.0) {
-            // Scale inward from top-center so the root stays centered
-            double originX = getWidth() / 2.0;
-            double originY = TOP_MARGIN;
-            gc.translate(originX, originY);
-            gc.scale(scale, scale);
-            gc.translate(-originX, -originY);
-        }
+        double offsetX = (getWidth() - scaledTreeWidth) / 2.0 - (minX * scale);
+        double offsetY = (getHeight() - scaledTreeHeight) / 2.0 - (minY * scale);
+
+        gc.save();
+        gc.translate(offsetX, offsetY);
+        gc.scale(scale, scale);
 
         drawEdges(gc, root);
         drawNodes(gc, root);
@@ -184,13 +211,16 @@ public class TreeViewer extends DataStructureViewer {
             gc.setStroke(Color.web("#1e66f5"));
         }
 
-        gc.fillOval(x - NODE_RADIUS, y - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
-        gc.setLineWidth(2.5);
-        gc.strokeOval(x - NODE_RADIUS, y - NODE_RADIUS, NODE_RADIUS * 2, NODE_RADIUS * 2);
+        // Draw circle
+        gc.fillOval(x - currentRadius, y - currentRadius, currentRadius * 2, currentRadius * 2);
+        gc.setLineWidth(2.0);
+        gc.strokeOval(x - currentRadius, y - currentRadius, currentRadius * 2, currentRadius * 2);
 
+        // Draw label text
         gc.setFill(Color.web("#11111b"));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
+        gc.setFont(Font.font("System", Math.max(9.0, currentRadius * 0.75)));
         gc.fillText(String.valueOf(node.getValue()), x, y);
 
         List<TreeNode> children = node.getChildren();
