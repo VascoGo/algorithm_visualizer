@@ -35,4 +35,11 @@ public class TreeNode extends Node{
     public TreeNode getParent() {
         return parent;
     }
+
+    public void cleanTree() {
+        this.setExplored(false);
+        for (TreeNode node: this.getChildren()) {
+            node.cleanTree();
+        }
+    }
 }

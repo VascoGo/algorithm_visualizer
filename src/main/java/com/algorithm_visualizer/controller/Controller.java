@@ -8,6 +8,7 @@ public abstract class Controller {
     protected Algorithm algorithm;
     private Boolean running = false;
 
+    public abstract void reset();
     public abstract void step();
 
     public abstract List<Algorithm> supportedAlgorithms();
@@ -20,5 +21,5 @@ public abstract class Controller {
     }
     public void setRunning(Boolean value) {
         this.running = value;
-    } 
+    }
 }

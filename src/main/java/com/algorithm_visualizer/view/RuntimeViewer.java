@@ -23,8 +23,10 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private DataStructureViewer dsv;
 
     private Button backButton;
+    private Button resetButton;
     private Button stepButton;
     private Button runButton;
+    private Button pauseButton;
     private ComboBox<Algorithm> operationSelector;
     private Timeline loop;
 
@@ -78,6 +80,13 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         });
 
         // --- Controls (Center/Right Group) ---
+        resetButton = new Button("Reset");
+        resetButton.setOnAction(action -> {
+            loop.stop();
+            this.dsv.getController().reset();
+            this.dsv.render();
+        });
+
         operationSelector = new ComboBox<>();
         operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
         operationSelector.setValue(Algorithm.NULL);
@@ -109,6 +118,11 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             loop.play();
         });
 
+        pauseButton = new Button("Pause");
+        pauseButton.setOnAction(action -> {
+            dsv.getController().setRunning(false);
+        });
+
         // Spacer to separate back navigation from action controls
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -122,10 +136,12 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         topBar.getChildren().addAll(
             backButton,
             spacer,
+            resetButton,
             operationSelector,
             new Separator(javafx.geometry.Orientation.VERTICAL),
             stepButton,
-            runButton
+            runButton,
+            pauseButton
         );
 
         super.getRoot().setTop(topBar);
@@ -135,6 +151,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     public Button getBackButton() { return backButton; }
     public Button getStepButton() { return stepButton; }
     public Button getRunButton() { return runButton; }
+    public Button getPauseButton() { return pauseButton; }
     public ComboBox<Algorithm> getOperationSelector() { return operationSelector; }
 
     @Override

@@ -30,6 +30,12 @@ public class TreeController extends Controller {
         }
     }
 
+    @Override 
+    public void reset() {
+        this.currentNode = this.tree.getRoot();
+        tree.reset();
+    }
+
     private void dfs() {
         currentNode.setExplored(true);
         for (TreeNode i: currentNode.getChildren()) {

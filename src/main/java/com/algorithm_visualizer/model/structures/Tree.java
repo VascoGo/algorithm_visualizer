@@ -16,7 +16,7 @@ public class Tree implements DataStructure {
     }
 
     public void reset() {
-        this.initialize();
+        root.cleanTree();
     }
 
     public TreeNode getRoot() {
