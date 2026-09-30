@@ -1,8 +1,9 @@
 package com.algorithm_visualizer.controller;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.model.structures.components.TreeNode;
@@ -11,6 +12,7 @@ public class TreeController extends Controller {
 
     private Tree tree;
     private TreeNode currentNode;
+    private Queue<TreeNode> bfsQueue = new LinkedList<TreeNode>();
 
     public TreeController(Tree tree) {
         super();
@@ -25,6 +27,11 @@ public class TreeController extends Controller {
                 this.dfs();
                 break;
             case BFS:
+                this.bfs();
+                break;
+            case DFS_POST:
+                this.dfsPost();
+                break;
             default:
                 break;
         }
@@ -33,6 +40,7 @@ public class TreeController extends Controller {
     @Override 
     public void reset() {
         this.currentNode = this.tree.getRoot();
+        this.bfsQueue.clear();
         tree.reset();
     }
 
@@ -54,9 +62,48 @@ public class TreeController extends Controller {
 
     }
 
+    private void bfs() {
+        currentNode.setExplored(true);
+
+        if (currentNode.getChildren().isEmpty() && bfsQueue.isEmpty()) {
+            super.setRunning(false);
+            return;
+        }
+
+        for (TreeNode node: currentNode.getChildren()) {
+            bfsQueue.add(node);
+        }
+
+        currentNode = bfsQueue.poll();
+    }
+
+    private void dfsPost() {
+        if (currentNode.isExplored()) {
+            if (currentNode.getParent() == null) {
+                super.setRunning(false);
+                return;
+            } else {
+                currentNode = currentNode.getParent();
+                dfsPost();
+            }
+
+            return;
+        }
+
+        for (TreeNode node: currentNode.getChildren()) {
+            if (!node.isExplored()) {
+                currentNode = node;
+                dfsPost();
+                return;
+            }
+        }
+
+        currentNode.setExplored(true);
+    }
+
     @Override 
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.BFS, Algorithm.DFS);
+        return Arrays.asList(Algorithm.BFS, Algorithm.DFS, Algorithm.DFS_POST);
     }
 
     public TreeNode getCurrentNode() {

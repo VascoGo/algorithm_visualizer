@@ -2,7 +2,6 @@ package com.algorithm_visualizer.controller;
 
 import java.util.List;
 
-import com.algorithm_visualizer.model.structures.DataStructure;
 
 public abstract class Controller {
     protected Algorithm algorithm;
