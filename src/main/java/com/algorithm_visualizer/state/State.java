@@ -9,7 +9,8 @@ import javafx.scene.Scene;
 
 public class State {
     public enum DataStructureIdentifier {
-        TREE
+        TREE,
+        BINARY_TREE
     }
 
     private static final int MENU_STATE = 0;

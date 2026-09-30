@@ -1,8 +1,10 @@
 package com.algorithm_visualizer.view;
 
 import com.algorithm_visualizer.controller.Algorithm;
+import com.algorithm_visualizer.model.structures.BinaryTree;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.state.State;
+import com.algorithm_visualizer.view.structures.BinaryTreeViewer;
 import com.algorithm_visualizer.view.structures.DataStructureViewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
 
@@ -52,6 +54,9 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         switch (context.getDsIdentifier()) {
             case TREE:
                 this.dsv = new TreeViewer(new Tree(), 1000, 1000);
+                break;
+            case BINARY_TREE:
+                this.dsv = new BinaryTreeViewer(1000, 1000, new BinaryTree());
                 break;
             default:
                 break;
