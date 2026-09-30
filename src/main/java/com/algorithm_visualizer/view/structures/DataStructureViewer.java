@@ -17,4 +17,6 @@ public abstract class DataStructureViewer extends Canvas{
     }
 
     public abstract void render();
+
+    public abstract void restart();
 }

@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import com.algorithm_visualizer.model.structures.DataStructure;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.model.structures.components.TreeNode;
 
@@ -18,6 +19,19 @@ public class TreeController extends Controller {
         super();
         this.tree = tree;
         this.currentNode = tree.getRoot();
+    }
+
+    @Override 
+    public void updateStructure(DataStructure tree) {
+        this.tree = (Tree) tree;
+        this.reset();
+    }
+
+    @Override 
+    public void reset() {
+        this.currentNode = this.tree.getRoot();
+        this.bfsQueue.clear();
+        tree.reset();
     }
 
     @Override 
@@ -35,13 +49,6 @@ public class TreeController extends Controller {
             default:
                 break;
         }
-    }
-
-    @Override 
-    public void reset() {
-        this.currentNode = this.tree.getRoot();
-        this.bfsQueue.clear();
-        tree.reset();
     }
 
     private void dfs() {

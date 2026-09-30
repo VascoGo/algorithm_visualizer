@@ -23,6 +23,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private DataStructureViewer dsv;
 
     private Button backButton;
+    private Button restartButton;
     private Button resetButton;
     private Button stepButton;
     private Button runButton;
@@ -79,6 +80,13 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             super.getContext().swapState();
         });
 
+        restartButton = new Button("Restart Structure");
+        restartButton.setOnAction((action) -> {
+            if (loop != null) loop.stop(); 
+            this.dsv.restart();
+        });
+
+
         // --- Controls (Center/Right Group) ---
         resetButton = new Button("Reset");
         resetButton.setOnAction(action -> {
@@ -91,7 +99,10 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
         operationSelector.setValue(Algorithm.NULL);
         operationSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldItem, newItem) -> {
+            loop.stop();
+            this.dsv.getController().reset();
             dsv.getController().setAlgorithm(newItem);
+            this.dsv.render();
         });
 
         stepButton = new Button("Step");
@@ -135,6 +146,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
 
         topBar.getChildren().addAll(
             backButton,
+            restartButton,
             spacer,
             resetButton,
             operationSelector,

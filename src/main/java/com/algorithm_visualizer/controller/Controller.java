@@ -2,11 +2,14 @@ package com.algorithm_visualizer.controller;
 
 import java.util.List;
 
+import com.algorithm_visualizer.model.structures.DataStructure;
+
 
 public abstract class Controller {
     protected Algorithm algorithm;
     private Boolean running = false;
 
+    public abstract void updateStructure(DataStructure structure);
     public abstract void reset();
     public abstract void step();
 
