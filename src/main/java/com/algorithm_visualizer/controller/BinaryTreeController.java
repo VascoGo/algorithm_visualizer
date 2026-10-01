@@ -40,6 +40,10 @@ public class BinaryTreeController extends Controller{
                 break;
             case BFS:
                 this.bfs();
+                break;
+            case DFS_POST:
+                this.dfsPost();
+                break;
             default:
                 break;
         }
@@ -72,10 +76,24 @@ public class BinaryTreeController extends Controller{
         else currentNode = bfsQueue.poll();
 
     }
+
+    private void dfsPost() {
+        if (currentNode.getLeft() != null && !currentNode.getLeft().isExplored()) {
+            currentNode = currentNode.getLeft();
+            dfsPost();
+        } else if (currentNode.getRight() != null && !currentNode.getRight().isExplored()) {
+            currentNode = currentNode.getRight();
+            dfsPost();
+        } else {
+            currentNode.setExplored(true);
+            if (currentNode.getParent() == null) this.setRunning(false);
+            else currentNode = currentNode.getParent();
+        }
+    }
             
 
     @Override 
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.DFS, Algorithm.BFS);
+        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST);
     }
 }
