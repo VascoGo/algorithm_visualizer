@@ -1,6 +1,7 @@
 package com.algorithm_visualizer.view;
 
 import com.algorithm_visualizer.controller.Algorithm;
+import com.algorithm_visualizer.controller.Algorithm.Category;
 import com.algorithm_visualizer.model.structures.BinaryTree;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.state.State;
@@ -15,6 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Separator;
+import javafx.scene.control.Spinner;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -30,6 +32,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private Button stepButton;
     private Button runButton;
     private Button pauseButton;
+    private Spinner<Integer> valueSpinner;
     private ComboBox<Algorithm> operationSelector;
     private Timeline loop;
 
@@ -100,6 +103,12 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             this.dsv.render();
         });
 
+        valueSpinner = new Spinner<Integer>(0, 100, 25, 1);
+        valueSpinner.setEditable(true);
+        valueSpinner.setPrefWidth(85);
+        valueSpinner.managedProperty().bind(valueSpinner.visibleProperty());
+        valueSpinner.setVisible(false);
+
         operationSelector = new ComboBox<>();
         operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
         operationSelector.setValue(Algorithm.NULL);
@@ -108,6 +117,9 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             dsv.getController().setAlgorithm(newItem);
             this.dsv.getController().reset();
             this.dsv.render();
+
+            if (newItem.getCategory() == Category.VALUE) valueSpinner.setVisible(true);
+            else valueSpinner.setVisible(false);
         });
 
         stepButton = new Button("Step");
@@ -155,6 +167,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             spacer,
             resetButton,
             operationSelector,
+            valueSpinner,
             new Separator(javafx.geometry.Orientation.VERTICAL),
             stepButton,
             runButton,

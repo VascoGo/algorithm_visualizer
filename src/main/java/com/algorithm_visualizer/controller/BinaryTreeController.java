@@ -94,6 +94,6 @@ public class BinaryTreeController extends Controller{
 
     @Override 
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST);
+        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST, Algorithm.SEARCH);
     }
 }
