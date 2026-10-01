@@ -23,7 +23,7 @@ public class BinaryTreeNode extends Node {
     }
 
     public BinaryTreeNode getParent() {
-        return getParent();
+        return this.parent;
     }
 
     public void addElement(int value) {
