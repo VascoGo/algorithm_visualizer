@@ -35,7 +35,7 @@ public class TreeController extends Controller {
     }
 
     @Override 
-    public void step() {
+    public void step(Integer value) {
         switch (algorithm) {
             case DFS:
                 this.dfs();

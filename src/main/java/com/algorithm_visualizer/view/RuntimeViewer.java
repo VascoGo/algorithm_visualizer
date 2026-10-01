@@ -124,16 +124,18 @@ public class RuntimeViewer extends Viewer<BorderPane> {
 
         stepButton = new Button("Step");
         stepButton.setOnAction((action) -> {
-            dsv.getController().step();
+            dsv.getController().step(valueSpinner.getValue());
             dsv.render();
         });
 
         runButton = new Button("Run");
         runButton.setOnAction((action) -> {
+            this.dsv.getController().reset();
+            this.dsv.render();
             this.dsv.getController().setRunning(true);
             this.loop = new Timeline(
                 new KeyFrame(Duration.millis(500), event -> {
-                    this.dsv.getController().step();
+                    this.dsv.getController().step(valueSpinner.getValue());
                     dsv.render();
 
                     if (!dsv.getController().isRunning()) {

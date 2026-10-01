@@ -33,7 +33,7 @@ public class BinaryTreeController extends Controller{
     }
 
     @Override 
-    public void step() {
+    public void step(Integer value) {
         switch (algorithm) {
             case DFS:
                 this.dfs();
@@ -44,6 +44,8 @@ public class BinaryTreeController extends Controller{
             case DFS_POST:
                 this.dfsPost();
                 break;
+            case SEARCH:
+                this.search(value);
             default:
                 break;
         }
@@ -89,6 +91,13 @@ public class BinaryTreeController extends Controller{
             if (currentNode.getParent() == null) this.setRunning(false);
             else currentNode = currentNode.getParent();
         }
+    }
+
+    private void search(Integer value) {
+        currentNode.setExplored(true);
+        if (currentNode.getValue() > value && currentNode.getLeft() != null) currentNode = currentNode.getLeft();
+        else if (currentNode.getValue() < value && currentNode.getRight() != null) currentNode = currentNode.getRight();
+        else this.setRunning(false);
     }
             
 
