@@ -1,7 +1,9 @@
 package com.algorithm_visualizer.controller;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import com.algorithm_visualizer.model.structures.BinaryTree;
 import com.algorithm_visualizer.model.structures.DataStructure;
@@ -11,6 +13,7 @@ public class BinaryTreeController extends Controller{
 
     private BinaryTree binaryTree;
     private BinaryTreeNode currentNode;
+    private Queue<BinaryTreeNode> bfsQueue = new LinkedList<BinaryTreeNode>();
 
     public BinaryTreeController(BinaryTree tree) {
         super();
@@ -35,6 +38,8 @@ public class BinaryTreeController extends Controller{
             case DFS:
                 this.dfs();
                 break;
+            case BFS:
+                this.bfs();
             default:
                 break;
         }
@@ -53,10 +58,24 @@ public class BinaryTreeController extends Controller{
             this.setRunning(false);
         }
     }
+
+    private void bfs() {
+        currentNode.setExplored(true);
+        if (currentNode.getLeft() != null && !currentNode.getLeft().isExplored()) {
+            bfsQueue.add(currentNode.getLeft());
+        }
+        if (currentNode.getRight() != null && !currentNode.getRight().isExplored()) {
+            bfsQueue.add(currentNode.getRight());
+        }
+
+        if (bfsQueue.isEmpty()) this.setRunning(false);
+        else currentNode = bfsQueue.poll();
+
+    }
             
 
     @Override 
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.DFS);
+        return Arrays.asList(Algorithm.DFS, Algorithm.BFS);
     }
 }
