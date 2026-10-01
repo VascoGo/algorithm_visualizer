@@ -1,7 +1,5 @@
 package com.algorithm_visualizer.model.structures;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -33,10 +31,6 @@ public class BinaryTree implements DataStructure{
 
     public void reset() {
         this.root.cleanTree();
-    }
-
-    public void initialize() {
-
     }
 
     public BinaryTreeNode getRoot() {

@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.crypto.spec.RC2ParameterSpec;
-
 import com.algorithm_visualizer.controller.TreeController;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.model.structures.components.TreeNode;

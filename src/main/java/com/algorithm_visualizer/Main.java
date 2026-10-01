@@ -1,18 +1,10 @@
 package com.algorithm_visualizer;
 
-import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.state.State;
-import com.algorithm_visualizer.view.RuntimeViewer;
-import com.algorithm_visualizer.view.Viewer;
-import com.algorithm_visualizer.view.structures.TreeViewer;
 
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
