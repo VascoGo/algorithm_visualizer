@@ -11,7 +11,10 @@ import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 public class BinaryTreeViewer extends DataStructureViewer {
@@ -126,7 +129,8 @@ public class BinaryTreeViewer extends DataStructureViewer {
     @Override
     public void render() {
         GraphicsContext gc = getGraphicsContext2D();
-        gc.clearRect(0, 0, getWidth(), getHeight());
+        gc.setFill(Color.web("#18181c"));
+        gc.fillRect(0, 0, getWidth(), getHeight());
 
         BinaryTreeNode root = (binaryTree != null) ? binaryTree.getRoot() : null;
         if (root == null) return;
@@ -180,8 +184,9 @@ public class BinaryTreeViewer extends DataStructureViewer {
         Point2D parentPos = positions.get(node);
         if (parentPos == null) return;
 
-        gc.setStroke(Color.web("#6c7086"));
-        gc.setLineWidth(2.0);
+        gc.setStroke(Color.web("#e2e8f0"));
+        gc.setLineWidth(2.5);
+        gc.setLineCap(StrokeLineCap.ROUND);
 
         BinaryTreeNode left = node.getLeft();
         BinaryTreeNode right = node.getRight();
@@ -208,23 +213,36 @@ public class BinaryTreeViewer extends DataStructureViewer {
         double x = pos.getX();
         double y = pos.getY();
 
+        // 1. Drop shadow underneath node
+        gc.setFill(Color.web("#050508", 0.65));
+        gc.fillOval(x - currentRadius + 2.0, y - currentRadius + 3.0, currentRadius * 2, currentRadius * 2);
+
+        // 2. Main Node Body (Dark Red unexplored, Emerald Green explored)
         if (node.isExplored()) {
-            gc.setFill(Color.web("#a6e3a1"));
-            gc.setStroke(Color.web("#40a02b"));
+            gc.setFill(Color.web("#10b981"));
+            gc.setStroke(Color.web("#ffffff"));
         } else {
-            gc.setFill(Color.web("#89b4fa"));
-            gc.setStroke(Color.web("#1e66f5"));
+            gc.setFill(Color.web("#800c1c"));
+            gc.setStroke(Color.web("#ffffff"));
         }
 
         gc.fillOval(x - currentRadius, y - currentRadius, currentRadius * 2, currentRadius * 2);
-        gc.setLineWidth(2.0);
+        gc.setLineWidth(2.5);
         gc.strokeOval(x - currentRadius, y - currentRadius, currentRadius * 2, currentRadius * 2);
 
-        gc.setFill(Color.web("#11111b"));
+        // 3. Specular Gloss Arc Highlight
+        gc.setStroke(Color.web("#ffffff", 0.45));
+        gc.setLineWidth(1.5);
+        double arcOffset = Math.max(2.0, currentRadius * 0.2);
+        double arcRadius = currentRadius - arcOffset;
+        gc.strokeArc(x - arcRadius, y - arcRadius, arcRadius * 2, arcRadius * 2, 45, 90, ArcType.OPEN);
+
+        // 4. Value Text
+        gc.setFill(Color.web("#ffffff"));
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
-        gc.setFont(Font.font("System", Math.max(9.0, currentRadius * 0.75)));
-        gc.fillText(String.valueOf(node.getValue()), x, y);
+        gc.setFont(Font.font("System", FontWeight.BOLD, Math.max(10.0, currentRadius * 0.75)));
+        gc.fillText(String.valueOf(node.getValue()), x, y + 0.5);
 
         drawNodes(gc, node.getLeft());
         drawNodes(gc, node.getRight());

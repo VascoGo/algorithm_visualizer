@@ -84,11 +84,13 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private void initControls() {
         // --- Navigation (Left Group) ---
         backButton = new Button("← Back to Menu");
+        backButton.getStyleClass().add("top-bar-button");
         backButton.setOnAction((action) -> {
             super.getContext().swapState();
         });
 
         restartButton = new Button("Restart Structure");
+        restartButton.getStyleClass().add("top-bar-button");
         restartButton.setOnAction((action) -> {
             this.dsv.getController().setRunning(false);
             this.dsv.restart();
@@ -97,6 +99,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
 
         // --- Controls (Center/Right Group) ---
         resetButton = new Button("Reset");
+        resetButton.getStyleClass().add("top-bar-button");
         resetButton.setOnAction(action -> {
             this.dsv.getController().setRunning(false);
             this.dsv.getController().reset();
@@ -105,13 +108,15 @@ public class RuntimeViewer extends Viewer<BorderPane> {
 
         valueSpinner = new Spinner<Integer>(0, 100, 25, 1);
         valueSpinner.setEditable(true);
-        valueSpinner.setPrefWidth(85);
+        valueSpinner.setPrefWidth(90);
+        valueSpinner.getStyleClass().add("top-bar-spinner");
         valueSpinner.managedProperty().bind(valueSpinner.visibleProperty());
         valueSpinner.setVisible(false);
 
         operationSelector = new ComboBox<>();
         operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
         operationSelector.setValue(Algorithm.NULL);
+        operationSelector.getStyleClass().add("top-bar-combo");
         operationSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldItem, newItem) -> {
             this.dsv.getController().setRunning(false);
             dsv.getController().setAlgorithm(newItem);
@@ -123,12 +128,14 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         });
 
         stepButton = new Button("Step");
+        stepButton.getStyleClass().add("top-bar-button");
         stepButton.setOnAction((action) -> {
             dsv.getController().step(valueSpinner.getValue());
             dsv.render();
         });
 
-        runButton = new Button("Run");
+        runButton = new Button("Run ▶");
+        runButton.getStyleClass().add("top-bar-button-run");
         runButton.setOnAction((action) -> {
             this.dsv.getController().reset();
             this.dsv.render();
@@ -148,7 +155,8 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             loop.play();
         });
 
-        pauseButton = new Button("Pause");
+        pauseButton = new Button("Pause ⏸");
+        pauseButton.getStyleClass().add("top-bar-button-pause");
         pauseButton.setOnAction(action -> {
             dsv.getController().setRunning(false);
         });
@@ -160,8 +168,10 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         // --- Top Bar Assembly ---
         HBox topBar = new HBox(12);
         topBar.setAlignment(Pos.CENTER_LEFT);
-        topBar.setPadding(new Insets(12, 16, 12, 16));
-        topBar.setStyle("-fx-background-color: #24273a; -fx-border-color: #363a4f; -fx-border-width: 0 0 1 0;");
+        topBar.getStyleClass().add("top-bar");
+
+        Separator sep = new Separator(javafx.geometry.Orientation.VERTICAL);
+        sep.getStyleClass().add("top-bar-separator");
 
         topBar.getChildren().addAll(
             backButton,
@@ -170,7 +180,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             resetButton,
             operationSelector,
             valueSpinner,
-            new Separator(javafx.geometry.Orientation.VERTICAL),
+            sep,
             stepButton,
             runButton,
             pauseButton

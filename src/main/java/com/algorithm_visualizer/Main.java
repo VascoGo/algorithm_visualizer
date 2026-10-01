@@ -21,6 +21,12 @@ public class Main extends Application {
 
         State state = new State();
         Scene scene = new Scene(state.getActiveView(), bounds.getWidth(), bounds.getHeight());
+        try {
+            String css = getClass().getResource("/styles.css").toExternalForm();
+            scene.getStylesheets().add(css);
+        } catch (Exception e) {
+            System.err.println("Could not load styles.css: " + e.getMessage());
+        }
         state.setScene(scene);
 
         primaryStage.setScene(scene);
