@@ -87,7 +87,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
 
         restartButton = new Button("Restart Structure");
         restartButton.setOnAction((action) -> {
-            if (loop != null) loop.stop(); 
+            this.dsv.getController().setRunning(false);
             this.dsv.restart();
         });
 
@@ -95,7 +95,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         // --- Controls (Center/Right Group) ---
         resetButton = new Button("Reset");
         resetButton.setOnAction(action -> {
-            loop.stop();
+            this.dsv.getController().setRunning(false);
             this.dsv.getController().reset();
             this.dsv.render();
         });
@@ -104,9 +104,9 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
         operationSelector.setValue(Algorithm.NULL);
         operationSelector.getSelectionModel().selectedItemProperty().addListener((observable, oldItem, newItem) -> {
-            loop.stop();
-            this.dsv.getController().reset();
+            this.dsv.getController().setRunning(false);
             dsv.getController().setAlgorithm(newItem);
+            this.dsv.getController().reset();
             this.dsv.render();
         });
 
