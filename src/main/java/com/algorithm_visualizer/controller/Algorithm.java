@@ -5,7 +5,8 @@ public enum Algorithm {
     BFS(Category.SIMPLE),
     DFS(Category.SIMPLE),
     DFS_POST(Category.SIMPLE),
-    SEARCH(Category.VALUE);
+    SEARCH(Category.VALUE),
+    INSERT(Category.VALUE);
 
     public enum Category {
         NONE,

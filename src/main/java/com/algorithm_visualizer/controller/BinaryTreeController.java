@@ -46,6 +46,8 @@ public class BinaryTreeController extends Controller{
                 break;
             case SEARCH:
                 this.search(value);
+            case INSERT:
+                this.insert(value);
             default:
                 break;
         }
@@ -102,10 +104,24 @@ public class BinaryTreeController extends Controller{
             this.setRunning(false);
         }
     }
-            
+     
+    private void insert(Integer value) {
+        currentNode.setExplored(true);
+        if (currentNode.getValue() > value && currentNode.getLeft() != null) currentNode = currentNode.getLeft();
+        else if (currentNode.getValue() < value && currentNode.getRight() != null) currentNode = currentNode.getRight();
+        else {
+            if (currentNode.getValue() == value) currentNode.setHit(true);
+            else {
+                currentNode.addElement(value);
+                if (currentNode.getValue() > value) currentNode.getLeft().setHit(true);
+                else currentNode.getRight().setHit(true);
+            }
+            this.setRunning(false);
+        }
+    }
 
     @Override 
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST, Algorithm.SEARCH);
+        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST, Algorithm.SEARCH, Algorithm.INSERT);
     }
 }
