@@ -28,7 +28,22 @@ public class LinkedListController extends Controller{
     }
 
     public void step(Integer value) {
+        switch (this.algorithm) {
+            case SEARCH:
+                this.search(value);
+                break;
+            default:
+                break;
+        }
+    }
 
+    private void search(int value) {
+        currentNode.setExplored(true);
+        if (currentNode.getValue() == value) {
+            currentNode.setHit(true);
+            this.setRunning(false);
+        } else if (currentNode.getAfter() != null) currentNode = currentNode.getAfter();
+        else this.setRunning(false);
     }
 
     public List<Algorithm> supportedAlgorithms() {
