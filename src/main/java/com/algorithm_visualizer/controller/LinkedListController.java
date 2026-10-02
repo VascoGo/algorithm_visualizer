@@ -13,6 +13,8 @@ public class LinkedListController extends Controller{
     private LinkedList list;
     private LinkedListNode currentNode;
 
+    private int counter = 0;
+
     public LinkedListController(LinkedList list) {
         this.list = list;
         this.reset();
@@ -20,6 +22,7 @@ public class LinkedListController extends Controller{
 
     public void reset() {
         this.currentNode = list.getRoot();
+        this.counter = 0;
         this.list.reset();
     }
 
@@ -32,6 +35,9 @@ public class LinkedListController extends Controller{
         switch (this.algorithm) {
             case SEARCH:
                 this.search(value);
+                break;
+            case INSERT:
+                this.insert(value);
                 break;
             default:
                 break;
@@ -48,7 +54,14 @@ public class LinkedListController extends Controller{
     }
 
     private void insert(int value) {
-
+        currentNode.setExplored(true);
+        if (currentNode.getAfter() == null) {
+            currentNode.addElement(value);
+            currentNode.getAfter().setHit(true);
+            this.setRunning(false);
+        } else {
+            currentNode = currentNode.getAfter();
+        }
     }
 
     public List<Algorithm> supportedAlgorithms() {
