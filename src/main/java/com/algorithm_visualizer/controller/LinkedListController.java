@@ -13,6 +13,11 @@ public class LinkedListController extends Controller{
     private LinkedList list;
     private LinkedListNode currentNode;
 
+    public LinkedListController(LinkedList list) {
+        this.list = list;
+        this.reset();
+    }
+
     public void reset() {
         this.currentNode = list.getRoot();
         this.list.reset();

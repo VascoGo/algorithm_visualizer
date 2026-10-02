@@ -3,15 +3,16 @@ package com.algorithm_visualizer.view;
 import com.algorithm_visualizer.controller.Algorithm;
 import com.algorithm_visualizer.controller.Algorithm.Category;
 import com.algorithm_visualizer.model.structures.BinaryTree;
+import com.algorithm_visualizer.model.structures.LinkedList;
 import com.algorithm_visualizer.model.structures.Tree;
 import com.algorithm_visualizer.state.State;
 import com.algorithm_visualizer.view.structures.BinaryTreeViewer;
 import com.algorithm_visualizer.view.structures.DataStructureViewer;
+import com.algorithm_visualizer.view.structures.LinkedListViewer;
 import com.algorithm_visualizer.view.structures.TreeViewer;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -60,6 +61,9 @@ public class RuntimeViewer extends Viewer<BorderPane> {
                 break;
             case BINARY_TREE:
                 this.dsv = new BinaryTreeViewer(1000, 1000, new BinaryTree());
+                break;
+            case LINKED_LIST:
+                this.dsv = new LinkedListViewer(1000, 1000, new LinkedList());
                 break;
             default:
                 break;

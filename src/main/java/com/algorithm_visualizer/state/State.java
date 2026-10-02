@@ -10,7 +10,8 @@ import javafx.scene.Scene;
 public class State {
     public enum DataStructureIdentifier {
         TREE,
-        BINARY_TREE
+        BINARY_TREE,
+        LINKED_LIST
     }
 
     private static final int MENU_STATE = 0;
