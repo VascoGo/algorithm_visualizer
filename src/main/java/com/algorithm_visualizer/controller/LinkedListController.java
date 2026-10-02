@@ -27,7 +27,8 @@ public class LinkedListController extends Controller{
         this.list = (LinkedList) ds;
     }
 
-    public void step(Integer value) {
+    @Override 
+    public void step(Integer value, Integer index) {
         switch (this.algorithm) {
             case SEARCH:
                 this.search(value);
@@ -46,7 +47,11 @@ public class LinkedListController extends Controller{
         else this.setRunning(false);
     }
 
+    private void insert(int value) {
+
+    }
+
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.SEARCH, Algorithm.INSERT, Algorithm.DELETE);
+        return Arrays.asList(Algorithm.SEARCH,Algorithm.INSERT, Algorithm.INSERT_INDEX, Algorithm.DELETE);
     }
 }

@@ -7,12 +7,14 @@ public enum Algorithm {
     DFS_POST(Category.SIMPLE),
     SEARCH(Category.VALUE),
     INSERT(Category.VALUE),
-    DELETE(Category.VALUE);
+    DELETE(Category.VALUE),
+    INSERT_INDEX(Category.DOUBLE);
 
     public enum Category {
         NONE,
         SIMPLE,
         VALUE,
+        DOUBLE,
     }
 
     Category category;

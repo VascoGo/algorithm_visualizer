@@ -179,6 +179,12 @@
     -fx-spacing: 12px;
 }
 
+.top-bar-label {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
 .top-bar-button {
     -fx-background-color: #7a0c1a;
     -fx-text-fill: #ffffff;

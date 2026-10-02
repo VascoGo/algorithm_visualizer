@@ -33,7 +33,7 @@ public class BinaryTreeController extends Controller{
     }
 
     @Override 
-    public void step(Integer value) {
+    public void step(Integer value, Integer index) {
         switch (algorithm) {
             case DFS:
                 this.dfs();

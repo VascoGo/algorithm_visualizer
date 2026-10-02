@@ -11,7 +11,7 @@ public abstract class Controller {
 
     public abstract void updateStructure(DataStructure structure);
     public abstract void reset();
-    public abstract void step(Integer value);
+    public abstract void step(Integer value, Integer index);
 
     public abstract List<Algorithm> supportedAlgorithms();
     public void setAlgorithm(Algorithm algorithm) {

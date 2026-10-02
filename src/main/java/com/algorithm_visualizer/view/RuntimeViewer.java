@@ -16,6 +16,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.BorderPane;
@@ -34,6 +35,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
     private Button runButton;
     private Button pauseButton;
     private Spinner<Integer> valueSpinner;
+    private Spinner<Integer> indexSpinner;
     private ComboBox<Algorithm> operationSelector;
     private Timeline loop;
 
@@ -114,8 +116,29 @@ public class RuntimeViewer extends Viewer<BorderPane> {
         valueSpinner.setEditable(true);
         valueSpinner.setPrefWidth(90);
         valueSpinner.getStyleClass().add("top-bar-spinner");
-        valueSpinner.managedProperty().bind(valueSpinner.visibleProperty());
+
+        Label valueLabel = new Label("Value:");
+        valueLabel.getStyleClass().add("top-bar-label");
+
+        HBox valueContainer = new HBox(6, valueLabel, valueSpinner);
+        valueContainer.setAlignment(Pos.CENTER);
+        valueContainer.managedProperty().bind(valueContainer.visibleProperty());
+        valueContainer.visibleProperty().bind(valueSpinner.visibleProperty());
         valueSpinner.setVisible(false);
+
+        indexSpinner = new Spinner<Integer>(0, 100, 25, 1);
+        indexSpinner.setEditable(true);
+        indexSpinner.setPrefWidth(90);
+        indexSpinner.getStyleClass().add("top-bar-spinner");
+
+        Label indexLabel = new Label("Index:");
+        indexLabel.getStyleClass().add("top-bar-label");
+
+        HBox indexContainer = new HBox(6, indexLabel, indexSpinner);
+        indexContainer.setAlignment(Pos.CENTER);
+        indexContainer.managedProperty().bind(indexContainer.visibleProperty());
+        indexContainer.visibleProperty().bind(indexSpinner.visibleProperty());
+        indexSpinner.setVisible(false);
 
         operationSelector = new ComboBox<>();
         operationSelector.getItems().addAll(dsv.getController().supportedAlgorithms());
@@ -127,14 +150,24 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             this.dsv.getController().reset();
             this.dsv.render();
 
-            if (newItem.getCategory() == Category.VALUE) valueSpinner.setVisible(true);
-            else valueSpinner.setVisible(false);
+            if (newItem.getCategory() == Category.VALUE) {
+                valueSpinner.setVisible(true);
+                indexSpinner.setVisible(false);
+            }
+            else if (newItem.getCategory() == Category.DOUBLE) {
+                valueSpinner.setVisible(true);
+                indexSpinner.setVisible(true);
+            }
+            else {
+                valueSpinner.setVisible(false);
+                indexSpinner.setVisible(false);
+            }
         });
 
         stepButton = new Button("Step");
         stepButton.getStyleClass().add("top-bar-button");
         stepButton.setOnAction((action) -> {
-            dsv.getController().step(valueSpinner.getValue());
+            dsv.getController().step(valueSpinner.getValue(), indexSpinner.getValue());
             dsv.render();
         });
 
@@ -146,7 +179,7 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             this.dsv.getController().setRunning(true);
             this.loop = new Timeline(
                 new KeyFrame(Duration.millis(500), event -> {
-                    this.dsv.getController().step(valueSpinner.getValue());
+                    this.dsv.getController().step(valueSpinner.getValue(), indexSpinner.getValue());
                     dsv.render();
 
                     if (!dsv.getController().isRunning()) {
@@ -183,7 +216,8 @@ public class RuntimeViewer extends Viewer<BorderPane> {
             spacer,
             resetButton,
             operationSelector,
-            valueSpinner,
+            valueContainer,
+            indexContainer,
             sep,
             stepButton,
             runButton,
