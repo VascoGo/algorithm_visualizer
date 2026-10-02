@@ -97,7 +97,10 @@ public class BinaryTreeController extends Controller{
         currentNode.setExplored(true);
         if (currentNode.getValue() > value && currentNode.getLeft() != null) currentNode = currentNode.getLeft();
         else if (currentNode.getValue() < value && currentNode.getRight() != null) currentNode = currentNode.getRight();
-        else this.setRunning(false);
+        else {
+            if (currentNode.getValue() == value) currentNode.setHit(true);
+            this.setRunning(false);
+        }
     }
             
 

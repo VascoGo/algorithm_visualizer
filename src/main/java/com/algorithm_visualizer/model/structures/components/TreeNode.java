@@ -37,6 +37,7 @@ public class TreeNode extends Node{
     }
 
     public void cleanTree() {
+        this.setHit(false);
         this.setExplored(false);
         for (TreeNode node: this.getChildren()) {
             node.cleanTree();

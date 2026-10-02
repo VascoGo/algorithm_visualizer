@@ -10,6 +10,7 @@ public class BinaryTreeNode extends Node {
 
     public void cleanTree() {
         this.setExplored(false);
+        this.setHit(false);
         if (this.left != null) this.left.cleanTree();
         if (this.right != null) this.right.cleanTree();
     }
