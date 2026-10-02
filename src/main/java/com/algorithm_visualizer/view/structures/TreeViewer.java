@@ -213,8 +213,12 @@ public class TreeViewer extends DataStructureViewer {
         gc.fillOval(x - currentRadius + 2.0, y - currentRadius + 3.0, currentRadius * 2, currentRadius * 2);
 
         // 2. Main Node Body (Dark Red unexplored, Emerald Green explored)
-        if (node.isExplored()) {
+        if (node.isHit()) {
             gc.setFill(Color.web("#10b981"));
+            gc.setStroke(Color.web("#ffffff"));
+        }
+        else if (node.isExplored()) {
+            gc.setFill(Color.web("#cec518"));
             gc.setStroke(Color.web("#ffffff"));
         } else {
             gc.setFill(Color.web("#800c1c"));

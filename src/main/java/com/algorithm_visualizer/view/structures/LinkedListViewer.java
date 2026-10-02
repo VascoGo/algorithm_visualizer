@@ -261,13 +261,14 @@ public class LinkedListViewer extends DataStructureViewer {
 
                 // 2. Main Node Body
                 if (curr.isHit()) {
-                    gc.setFill(Color.web("#f59e0b")); // Bright Amber for Hit node
+                    gc.setFill(Color.web("#10b981"));
                     gc.setStroke(Color.web("#ffffff"));
-                } else if (curr.isExplored()) {
-                    gc.setFill(Color.web("#10b981")); // Emerald Green for Explored node
+                }
+                else if (curr.isExplored()) {
+                    gc.setFill(Color.web("#cec518"));
                     gc.setStroke(Color.web("#ffffff"));
                 } else {
-                    gc.setFill(Color.web("#800c1c")); // Dark Red for Unexplored node
+                    gc.setFill(Color.web("#800c1c"));
                     gc.setStroke(Color.web("#ffffff"));
                 }
 
