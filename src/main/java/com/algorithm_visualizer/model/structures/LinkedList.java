@@ -25,4 +25,8 @@ public class LinkedList implements DataStructure {
     public LinkedListNode getRoot() {
         return this.root;
     }
+
+    public void setRoot(int value) {
+        this.root = new LinkedListNode(value);
+    }
 }
