@@ -37,8 +37,13 @@ public class BinaryTree implements DataStructure{
         return this.root;
     }
 
-    private void addElement(int value) {
+    public void addElement(int value) {
         if (this.root == null) this.root = new BinaryTreeNode(value, null);
         else root.addElement(value);
+    }
+
+    public void remove(int value) {
+        if (this.root.getValue() == value) this.root = null;
+        else root.remove(value);
     }
 }

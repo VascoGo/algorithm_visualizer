@@ -46,8 +46,13 @@ public class BinaryTreeController extends Controller{
                 break;
             case SEARCH:
                 this.search(value);
+                break;
             case INSERT:
                 this.insert(value);
+                break;
+            case DELETE:
+                this.delete(value);
+                break;
             default:
                 break;
         }
@@ -112,7 +117,7 @@ public class BinaryTreeController extends Controller{
         else {
             if (currentNode.getValue() == value) currentNode.setHit(true);
             else {
-                currentNode.addElement(value);
+                binaryTree.addElement(value);
                 if (currentNode.getValue() > value) currentNode.getLeft().setHit(true);
                 else currentNode.getRight().setHit(true);
             }
@@ -120,8 +125,36 @@ public class BinaryTreeController extends Controller{
         }
     }
 
+    private void delete(Integer value) {
+        currentNode.setExplored(true);
+        if (currentNode.isHit()) {
+            BinaryTreeNode replacementNode = this.find(currentNode.getRight());
+            if (replacementNode == null) {
+                binaryTree.remove(currentNode.getValue());
+                this.setRunning(false);
+            }
+            else if (!replacementNode.isHit()) replacementNode.setHit(true);
+            else {
+                currentNode.setRight(replacementNode.getRight());
+                currentNode.setValue(replacementNode.getValue());
+                replacementNode = null;
+                this.setRunning(false);
+            } 
+        }
+        else if (currentNode.getValue() > value && currentNode.getLeft() != null) currentNode = currentNode.getLeft();
+        else if (currentNode.getValue() < value && currentNode.getRight() != null) currentNode = currentNode.getRight();
+        else if (currentNode.getValue() == value) currentNode.setHit(true);
+        else this.setRunning(false);
+    }
+
+    private BinaryTreeNode find(BinaryTreeNode node) {
+        if (node == null || node.getLeft() == null) return node;
+        node.setExplored(true);
+        return find(node.getLeft());
+    }
+
     @Override 
     public List<Algorithm> supportedAlgorithms() {
-        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST, Algorithm.SEARCH, Algorithm.INSERT);
+        return Arrays.asList(Algorithm.DFS, Algorithm.BFS, Algorithm.DFS_POST, Algorithm.SEARCH, Algorithm.INSERT, Algorithm.DELETE);
     }
 }

@@ -27,6 +27,14 @@ public class BinaryTreeNode extends Node {
         return this.parent;
     }
 
+    public void setLeft(BinaryTreeNode node) {
+        this.left = node;
+    }
+
+    public void setRight(BinaryTreeNode node) {
+        this.right = node;
+    }
+
     public void addElement(int value) {
         if (value < this.getValue()) {
             if (getLeft() == null) this.left = new BinaryTreeNode(value, this);
@@ -34,6 +42,18 @@ public class BinaryTreeNode extends Node {
         } else {
             if (getRight() == null) this.right = new BinaryTreeNode(value, this);
             else right.addElement(value);
+        }
+    }
+
+    public void remove(int value) {
+        if (value < this.getValue()) {
+            if (this.getLeft() == null) return;
+            else if (this.getLeft().getValue() == value) this.left = null;
+            else this.getLeft().remove(value);
+        } else if (value > this.getValue()) {
+            if (this.getRight() == null) return;
+            else if (this.getRight().getValue() == value) this.right = null;
+            else this.getRight().remove(value);
         }
     }
 
