@@ -12,6 +12,7 @@ public class LinkedListController extends Controller{
     
     private LinkedList list;
     private LinkedListNode currentNode;
+    private LinkedListNode nextNode;
 
     private int counter = 1;
 
@@ -22,6 +23,8 @@ public class LinkedListController extends Controller{
 
     public void reset() {
         this.currentNode = list.getRoot();
+        if (currentNode != null) nextNode = currentNode.getAfter();
+        else nextNode = null;
         this.counter = 1;
         this.list.reset();
     }
@@ -41,6 +44,9 @@ public class LinkedListController extends Controller{
                 break;
             case INSERT_INDEX:
                 this.insertIndex(value, index);
+                break;
+            case DELETE:
+                this.delete(value);
                 break;
             default:
                 break;
@@ -73,7 +79,7 @@ public class LinkedListController extends Controller{
 
         if (index == 0) {
             currentNode.setExplored(false);
-            this.list.setRoot(value);
+            this.list.setRoot(new LinkedListNode(value));
             this.list.getRoot().setAfter(currentNode);
             currentNode = this.list.getRoot();
             currentNode.setHit(true);
@@ -89,6 +95,30 @@ public class LinkedListController extends Controller{
 
         counter++;
     }
+
+    public void delete(int value) {
+        if (currentNode == null) this.setRunning(false);
+        else if (currentNode.getValue() == value) {
+            if (currentNode.isHit()) {
+                list.setRoot(nextNode);
+                this.setRunning(false);
+            } else currentNode.setHit(true);
+        } else if (!currentNode.isExplored()) currentNode.setExplored(true);
+        else {
+            if (nextNode == null) this.setRunning(false);
+            else if (nextNode.isHit()) {
+                currentNode.setAfter(nextNode.getAfter());
+                nextNode = null;
+                this.setRunning(false);
+            }
+            else if (nextNode.getValue() == value) nextNode.setHit(true);
+            else {
+                currentNode = nextNode;
+                currentNode.setExplored(true);
+                nextNode = nextNode.getAfter();
+            }
+        }
+    } 
 
     public List<Algorithm> supportedAlgorithms() {
         return Arrays.asList(Algorithm.SEARCH,Algorithm.INSERT, Algorithm.INSERT_INDEX, Algorithm.DELETE);
